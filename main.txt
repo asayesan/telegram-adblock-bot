@@ -1,0 +1,29 @@
+import telegram
+from telegram.ext import Updater
+from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext.filters import Filters
+import collections
+def link_filter(update, context):
+    if update.message.from_user.username in ["OctopusGame_Bot", "JarvisSohbetBot", "OctopusMuzikBot", "Emily_utagbot", "KrakenMuzikBot", "Etiketleme_bot", "utagg_bot", "SangMataInfo_bot"]:
+        if "@" in update.message.text:
+            update.message.delete()
+        if "t.me/" in update.message.text:
+            update.message.delete()
+        if "https:" in update.message.text:
+            update.message.delete()
+        if "www." in update.message.text:
+            update.message.delete()
+
+
+
+def main():
+    # Bot'un API anahtarını tanımlayın
+    bot = telegram.Bot(token='5962067743:AAEqcpXrZ2YJnSYd0dHC_MQzbtUst3tUdTg')
+    updater = Updater(token='5962067743:AAEqcpXrZ2YJnSYd0dHC_MQzbtUst3tUdTg', use_context=True)
+    dp = updater.dispatcher
+    dp.add_handler(MessageHandler(Filters.text, link_filter))
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
