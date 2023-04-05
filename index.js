@@ -23,19 +23,22 @@ fs.readdir(wordDir, (err, files) => {
 });
 
 // Özel mesajda hoşgeldin mesajı gönder
+// Özel mesajda hoşgeldin mesajı gönder
 bot.on("message", (msg) => {
-  if(msg.chat.type == 'private') {
-    bot.sendMessage(msg.chat.id, "Merhaba ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. /info yazarak daha fazla detaya ulaşabilirsin.");
+  if (msg.chat.type == 'private' && msg.text === '/start') {
+    bot.sendMessage(msg.chat.id, "Merhaba ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. /info yazarak daha fazla detaya ulaşabilirsin.", {parse_mode: "HTML"});
   };
 });
+
+
 
 
 // Özel mesajda info mesajı gönder
 bot.onText(/\/info/, (msg) => {
   const chatId = msg.chat.id;
   const message = `
-  <b>Telegram Adblock Bot</b>
-  <i>Sürüm: Beta 0.2</i>
+  <b>Telegram Adblock Bot<b>
+  <i>Sürüm: Beta 0.2<i>
   <i>Beta sürümü olduğu için '*' ile belirtilen özellikler yakında eklenecek.<i>
 
   Bu bot ile gruplardaki belirlemiş olduğunuz reklamları engelleyebilirsiniz.
