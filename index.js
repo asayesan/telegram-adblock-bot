@@ -44,6 +44,7 @@ bot.onText(/\/info/, (msg) => {
   /blockword (kelime/link) yasaklamak istediğiniz kelime/link giriniz.
   /unblockword (kelime/link) daha önce yasaklanan kelime/link' in yasağını kaldırır.
   */list Yasaklanmış kelimeleri listeler.
+  */stats Yasaklanan kelimelerin istatistiğini görmenizi sağlar.
   */standartmode Standart reklam engelleme modunu etkinleştirir.
   */custommode Özelleştrilmiş reklam engelleme modu. Kendinize göre özelleştiriniz. (Standart modu iptal eder)
   /info Bot hakkında bilgi verir.
