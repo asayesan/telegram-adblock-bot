@@ -22,8 +22,38 @@ fs.readdir(wordDir, (err, files) => {
   });
 });
 
+// Özel mesajda hoşgeldin mesajı gönder
+bot.on("message", (msg) => {
+  if(msg.chat.type == 'private') {
+    bot.sendMessage(msg.chat.id, "Merhaba ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. /info yazarak daha fazla detaya ulaşabilirsin.");
+  };
+});
+
+
+// Özel mesajda info mesajı gönder
+bot.onText(/\/info/, (msg) => {
+  const chatId = msg.chat.id;
+  const message = `
+  <b> Telegram Adblock Bot </b>
+  <i> Sürüm: Beta 0.2</i>
+
+  Bu bot ile gruplardaki belirlemiş olduğunuz reklamları engelleyebilirsiniz.
+
+  Komutlar:
+  /blockword (kelime/link) yasaklamak istediğiniz kelime/link giriniz.
+  /unblockword (kelime/link) daha önce yasaklanan kelime/link' in yasağını kaldırır.
+  /list Yasaklanmış kelimeleri listeler.
+  /standartmode Standart reklam engelleme modunu etkinleştirir.
+  /custommode Özelleştrilmiş reklam engelleme modu. Kendinize göre özelleştiriniz. (Standart modu iptal eder)
+  /info Bot hakkında bilgi verir.
+
+  `;
+  bot.sendMessage(chatId, message, { parse_mode: "html" });
+});
+
+
 // yeni bir yasaklı kelime ekle
-bot.onText(/\/addword (.+)/, (msg, match) => {
+bot.onText(/\/blockword (.+)/, (msg, match) => {
   const groupId = msg.chat.id.toString();
   const word = match[1];
   if (!groups[groupId]) {
@@ -40,7 +70,7 @@ bot.onText(/\/addword (.+)/, (msg, match) => {
 });
 
 // yasaklı kelimeyi kaldır
-bot.onText(/\/removeword (.+)/, (msg, match) => {
+bot.onText(/\/unblockword (.+)/, (msg, match) => {
   const groupId = msg.chat.id.toString();
   const word = match[1];
   if (!groups[groupId]) {
