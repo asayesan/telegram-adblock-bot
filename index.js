@@ -34,17 +34,18 @@ bot.on("message", (msg) => {
 bot.onText(/\/info/, (msg) => {
   const chatId = msg.chat.id;
   const message = `
-  <b> Telegram Adblock Bot </b>
-  <i> Sürüm: Beta 0.2</i>
+  <b>Telegram Adblock Bot</b>
+  <i>Sürüm: Beta 0.2</i>
+  <i>Beta sürümü olduğu için '*' ile belirtilen özellikler yakında eklenecek.<i>
 
   Bu bot ile gruplardaki belirlemiş olduğunuz reklamları engelleyebilirsiniz.
 
   Komutlar:
   /blockword (kelime/link) yasaklamak istediğiniz kelime/link giriniz.
   /unblockword (kelime/link) daha önce yasaklanan kelime/link' in yasağını kaldırır.
-  /list Yasaklanmış kelimeleri listeler.
-  /standartmode Standart reklam engelleme modunu etkinleştirir.
-  /custommode Özelleştrilmiş reklam engelleme modu. Kendinize göre özelleştiriniz. (Standart modu iptal eder)
+  */list Yasaklanmış kelimeleri listeler.
+  */standartmode Standart reklam engelleme modunu etkinleştirir.
+  */custommode Özelleştrilmiş reklam engelleme modu. Kendinize göre özelleştiriniz. (Standart modu iptal eder)
   /info Bot hakkında bilgi verir.
 
   `;
@@ -65,7 +66,7 @@ bot.onText(/\/blockword (.+)/, (msg, match) => {
       console.error(err);
       return;
     }
-    bot.sendMessage(groupId, `${word} kelimesi yasaklı kelimeler listesine eklendi!`);
+    bot.sendMessage(groupId, `${word} yasaklı kelimeler listesine eklendi!`);
   });
 });
 
@@ -85,10 +86,10 @@ bot.onText(/\/unblockword (.+)/, (msg, match) => {
         console.error(err);
         return;
       }
-      bot.sendMessage(groupId, `${word} kelimesi yasaklı kelimeler listesinden kaldırıldı!`);
+      bot.sendMessage(groupId, `${word} yasaklı kelimeler listesinden kaldırıldı!`);
     });
   } else {
-    bot.sendMessage(groupId, `${word} kelimesi yasaklı kelimeler listesinde bulunamadı!`);
+    bot.sendMessage(groupId, `${word} yasaklı kelimeler listesinde bulunamadı!`);
   }
 });
 
