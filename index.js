@@ -24,7 +24,7 @@ fs.readdir(wordDir, (err, files) => {
 
 bot.on('message', (msg) => {
   if (msg.chat.type === 'private' && msg.text === '/start') {
-    bot.sendMessage(msg.chat.id, '<b>Merhaba @' + msg.from.username + ', ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. Daha fazla detay için /info komutunu kullanabilirsin.</b>\n\n<i>Sürüm: Beta 2 --- Sahip: @Asyacuk --- Kanal: @Asyacukproject</i>', { parse_mode: 'HTML' });
+    bot.sendMessage(msg.chat.id, '<b>Merhaba @' + msg.from.username + ', ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. Daha fazla detay için /info komutunu kullanabilirsin.</b>\n\n<i>Sürüm: 0.3 --- Sahip: @Asyacuk --- Kanal: @Asyacukproject</i>', { parse_mode: 'HTML' });
   }
 });
 
@@ -47,6 +47,8 @@ bot.onText(/\/info/, (msg) => {
   */standartmode Standart reklam engelleme modunu etkinleştirir.
   */custommode Özelleştrilmiş reklam engelleme modu. Kendinize göre özelleştiriniz. (Standart modu iptal eder)
   /info Bot hakkında bilgi verir.
+
+  Kurulum ve bot hakkında yardım için @Asyacuk'a yazabilirsiniz.
 
   `;
   bot.sendMessage(chatId, message, { parse_mode: "html" });
