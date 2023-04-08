@@ -23,7 +23,6 @@ fs.readdir(wordDir, (err, files) => {
 });
 
 // Özel mesajda hoşgeldin mesajı gönder
-// Özel mesajda hoşgeldin mesajı gönder
 bot.on("message", (msg) => {
   if (msg.chat.type == 'private' && msg.text === '/start') {
     bot.sendMessage(msg.chat.id, "Merhaba ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. /info yazarak daha fazla detaya ulaşabilirsin.", {parse_mode: "HTML"});
@@ -38,7 +37,7 @@ bot.onText(/\/info/, (msg) => {
   <i>Sürüm: Beta 0.2</i>
   <i>Beta sürümü olduğu için '*' ile belirtilen özellikler yakında eklenecek.</i>
 
-  Bu bot ile gruplardaki belirlemiş olduğunuz reklamları engelleyebilirsiniz.
+  Bu bot ile gruplardaki belirlemiş olduğunuz reklamları engelleyebilirsiniz. (Eğer grup yöneticisi iseniz)
 
   Komutlar:
   /blockword (kelime/link) yasaklamak istediğiniz kelime/link giriniz.
