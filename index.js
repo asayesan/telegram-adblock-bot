@@ -22,12 +22,12 @@ fs.readdir(wordDir, (err, files) => {
   });
 });
 
-// Özel mesajda hoşgeldin mesajı gönder
-bot.on("message", (msg) => {
-  if (msg.chat.type == 'private' && msg.text === '/start') {
-    bot.sendMessage(msg.chat.id, "Merhaba ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. /info yazarak daha fazla detaya ulaşabilirsin.", {parse_mode: "HTML"});
-  };
+bot.on('message', (msg) => {
+  if (msg.chat.type === 'private' && msg.text === '/start') {
+    bot.sendMessage(msg.chat.id, '<b>Merhaba @' + msg.from.username + ', ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. Daha fazla detay için /info komutunu kullanabilirsin.</b>\n\n<i>Sürüm: Beta 2 --- Sahip: @Asyacuk --- Kanal: @Asyacukproject</i>', { parse_mode: 'HTML' });
+  }
 });
+
 
 // Özel mesajda info mesajı gönder
 bot.onText(/\/info/, (msg) => {
