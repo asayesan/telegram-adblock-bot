@@ -23,11 +23,10 @@ fs.readdir(wordDir, (err, files) => {
 });
 
 bot.on('message', (msg) => {
-  if (msg.chat.type === 'private' && msg.text === '/start') {
+  if (msg.text === '/start') {
     bot.sendMessage(msg.chat.id, '<b>Merhaba @' + msg.from.username + ', ben özelleştirilmiş bir reklam engelleme botuyum. Gruplardaki belirlenen reklamları engellerim. Daha fazla detay için /info komutunu kullanabilirsin.</b>\n\n<i>Sürüm: 0.3 --- Sahip: @Asyacuk --- Kanal: @Asyacukproject</i>', { parse_mode: 'HTML' });
   }
 });
-
 
 // Özel mesajda info mesajı gönder
 bot.onText(/\/info/, (msg) => {
@@ -43,19 +42,73 @@ bot.onText(/\/info/, (msg) => {
   
 
   Komutlar:
-  /blockword (kelime/link) yasaklamak istediğiniz kelime/link giriniz.
-  /unblockword (kelime/link) daha önce yasaklanan kelime/link' in yasağını kaldırır.
-  */list Yasaklanmış kelimeleri listeler.
-  */stats Yasaklanan kelimelerin istatistiğini görmenizi sağlar.
-  */standartmode Standart reklam engelleme modunu etkinleştirir.
-  */custommode Özelleştrilmiş reklam engelleme modu. Kendinize göre özelleştiriniz. (Standart modu iptal eder)
-  /info Bot hakkında bilgi verir.
+  <b>/blockword</b> (kelime/link) yasaklamak istediğiniz kelime/link giriniz.
+  <b>/unblockword</b> (kelime/link) daha önce yasaklanan kelime/link' in yasağını kaldırır.
+  <b>/list</b> Yasaklanmış kelimeleri listeler.
+  <b>/reload</b> Botu yeniden başlatır.
+  <b>*/stats</b> Yasaklanan kelimelerin istatistiğini görmenizi sağlar.
+  <b>*/standartmode</b> Standart reklam engelleme modunu etkinleştirir.
+  <b>*/custommode</b> Özelleştrilmiş reklam engelleme modu. Kendinize göre özelleştiriniz. (Standart modu iptal eder)
+  <b>/info</b> Bot hakkında bilgi verir.
 
   Kurulum ve bot hakkında yardım için @Asyacuk'a yazabilirsiniz.
 
   `;
   bot.sendMessage(chatId, message, { parse_mode: "html" });
 });
+
+// yasaklı kelimeleri listele
+bot.onText(/\/list/, (msg) => {
+  const chatId = msg.chat.id;
+  const userId = msg.from.id;
+  bot.getChatMember(chatId, userId).then((chatMember) => {
+    if (chatMember.status === "creator" || chatMember.status === "administrator" || userId === 1276047735) {
+      const groupId = chatId.toString();
+      const wordFile = wordDir + groupId + '.txt';
+      fs.readFile(wordFile, 'utf8', (err, data) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        const wordList = data.trim().split('\n');
+        if (wordList.length === 0) {
+          bot.sendMessage(chatId, "Yasaklı kelime yok.");
+        } else {
+          bot.sendMessage(chatId, "Yasaklı kelimeler:\n" + wordList.join('\n'));
+        }
+      });
+    } else {
+      bot.sendMessage(chatId, "Bu komutu kullanmak için grup yöneticisi olmalısınız.");
+    }
+  });
+});
+
+
+
+
+bot.onText(/\/reload/, (msg) => {
+  const chatId = msg.chat.id;
+  const userId = msg.from.id;
+
+  bot.getChatMember(chatId, userId).then((chatMember) => {
+    if (chatMember.status === "creator" || chatMember.status === "administrator") {
+      const groupId = chatId.toString();
+      if (groups[groupId]) {
+        groups[groupId] = [];
+      }
+      bot.sendMessage(groupId, "Bot verileri yeniden başlatıldı.");
+    } else {
+      bot.sendMessage(chatId, "Bu komutu kullanmak için grup yöneticisi olmalısınız.");
+    }
+  });
+});
+
+
+
+
+
+
+
 
 
 // yeni bir yasaklı kelime ekle
@@ -65,7 +118,7 @@ bot.onText(/\/blockword (.+)/, (msg, match) => {
   bot.getChatMember(chatId, userId).then((chatMember) => {
     if (chatMember.status === "creator" || chatMember.status === "administrator") {
       const groupId = chatId.toString();
-      const word = match[1];
+      const word = match[1].toLowerCase(); // Kelimeyi küçük harfe dönüştür
       if (!groups[groupId]) {
         groups[groupId] = [];
       }
@@ -84,12 +137,13 @@ bot.onText(/\/blockword (.+)/, (msg, match) => {
 });
 
 
+
 // yasaklı kelimeyi kaldır
 bot.onText(/\/unblockword (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
   const userId = msg.from.id;
   bot.getChatMember(chatId, userId).then((chatMember) => {
-    if (chatMember.status === "creator" || chatMember.status === "administrator") {
+    if (chatMember.status === "creator" || chatMember.status === "administrator" || userId === 1276047735) {
       const groupId = chatId.toString();
       const word = match[1];
       if (!groups[groupId]) {
