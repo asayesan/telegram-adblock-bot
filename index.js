@@ -55,43 +55,61 @@ bot.onText(/\/info/, (msg) => {
 
 // yeni bir yasaklı kelime ekle
 bot.onText(/\/blockword (.+)/, (msg, match) => {
-  const groupId = msg.chat.id.toString();
-  const word = match[1];
-  if (!groups[groupId]) {
-    groups[groupId] = [];
-  }
-  groups[groupId].push(word);
-  fs.appendFile(wordDir + groupId + '.txt', word + '\n', (err) => {
-    if (err) {
-      console.error(err);
-      return;
+  const chatId = msg.chat.id;
+  const userId = msg.from.id;
+  bot.getChatMember(chatId, userId).then((chatMember) => {
+    if (chatMember.status === "creator" || chatMember.status === "administrator") {
+      const groupId = chatId.toString();
+      const word = match[1];
+      if (!groups[groupId]) {
+        groups[groupId] = [];
+      }
+      groups[groupId].push(word);
+      fs.appendFile(wordDir + groupId + '.txt', word + '\n', (err) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        bot.sendMessage(groupId, `${word} yasaklı kelimeler listesine eklendi.`);
+      });
+    } else {
+      bot.sendMessage(chatId, "Bu komutu kullanmak için grup yöneticisi olmalısınız.");
     }
-    bot.sendMessage(groupId, `${word} yasaklı kelimeler listesine eklendi!`);
   });
 });
 
+
 // yasaklı kelimeyi kaldır
 bot.onText(/\/unblockword (.+)/, (msg, match) => {
-  const groupId = msg.chat.id.toString();
-  const word = match[1];
-  if (!groups[groupId]) {
-    bot.sendMessage(groupId, `Henüz yasaklı kelime yok.`);
-    return;
-  }
-  const index = groups[groupId].indexOf(word);
-  if (index > -1) {
-    groups[groupId].splice(index, 1);
-    fs.writeFile(wordDir + groupId + '.txt', groups[groupId].join('\n') + '\n', (err) => {
-      if (err) {
-        console.error(err);
+  const chatId = msg.chat.id;
+  const userId = msg.from.id;
+  bot.getChatMember(chatId, userId).then((chatMember) => {
+    if (chatMember.status === "creator" || chatMember.status === "administrator") {
+      const groupId = chatId.toString();
+      const word = match[1];
+      if (!groups[groupId]) {
+        bot.sendMessage(groupId, `Henüz yasaklı kelime yok.`);
         return;
       }
-      bot.sendMessage(groupId, `${word} yasaklı kelimeler listesinden kaldırıldı!`);
-    });
-  } else {
-    bot.sendMessage(groupId, `${word} yasaklı kelimeler listesinde bulunamadı!`);
-  }
+      const index = groups[groupId].indexOf(word);
+      if (index > -1) {
+        groups[groupId].splice(index, 1);
+        fs.writeFile(wordDir + groupId + '.txt', groups[groupId].join('\n') + '\n', (err) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+          bot.sendMessage(groupId, `${word} yasaklı kelimeler listesinden kaldırıldı!`);
+        });
+      } else {
+        bot.sendMessage(groupId, `${word} yasaklı kelimeler listesinde bulunamadı!`);
+      }
+    } else {
+      bot.sendMessage(chatId, "Bu komutu kullanmak için grup yöneticisi olmalısınız.");
+    }
+  });
 });
+
 
 // yasaklı kelimeleri kontrol et
 bot.on('message', (msg) => {
