@@ -37,7 +37,10 @@ bot.onText(/\/info/, (msg) => {
   <i>Sürüm: Beta 0.2</i>
   <i>Beta sürümü olduğu için '*' ile belirtilen özellikler yakında eklenecek.</i>
 
+
   Bu bot ile gruplardaki belirlemiş olduğunuz reklamları engelleyebilirsiniz. (Eğer grup yöneticisi iseniz)
+
+  
 
   Komutlar:
   /blockword (kelime/link) yasaklamak istediğiniz kelime/link giriniz.
